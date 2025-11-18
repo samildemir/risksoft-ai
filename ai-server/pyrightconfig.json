@@ -1,0 +1,28 @@
+{
+  "include": ["**/*.py"],
+  "exclude": ["**/__pycache__", "**/venv", "**/.venv", "**/node_modules"],
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.8",
+  "pythonPlatform": "Linux",
+  "venvPath": ".",
+  "venv": ".venv",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "pythonVersion": "3.8",
+      "pythonPlatform": "Linux",
+      "extraPaths": [
+        ".",
+        "./routes",
+        "./business",
+        "./core",
+        "./models",
+        "./services",
+        "./utils",
+        "./constants",
+        "./.venv/lib/python3.9/site-packages"
+      ]
+    }
+  ]
+}

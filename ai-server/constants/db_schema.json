@@ -1,0 +1,267 @@
+{
+    "tables": [
+          {
+              "name": "accounts",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "bucket_id", "type": "varchar" },
+                  { "name": "account_type_id", "type": "integer", "foreignKey": true, "references": "account_types" },
+                  { "name": "is_active", "type": "boolean" }
+              ]
+          },
+          {
+              "name": "bulgu_rapor",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "operational_audit_report_id", "type": "integer", "foreignKey": true, "references": "operational_audit_report_v1" },
+                  { "name": "secg_report_id", "type": "integer", "foreignKey": true, "references": "secg_report" }
+              ]
+          },
+          {
+              "name": "companies",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "tax_administration_id", "type": "integer", "foreignKey": true, "references": "tax_administrations" },
+                  { "name": "name", "type": "varchar" },
+                  { "name": "tax_number", "type": "varchar" }
+              ]
+          },
+          {
+              "name": "dfis",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "control_list_response_id", "type": "integer", "foreignKey": true, "references": "control_list_responses" },
+                  { "name": "created_by", "type": "integer", "foreignKey": true, "references": "users"},
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "created_for", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "unit_id", "type": "integer", "foreignKey": true, "references": "units" },
+                  { "name": "supplier_id", "type": "integer", "foreignKey": true, "references": "suppliers" },
+                  { "name": "created_workplace", "type": "integer", "foreignKey": true, "references": "workplaces"},
+                  { "name": "is_closed", "type": "boolean" }
+              ]
+          },
+           {
+              "name": "incident_report",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "company_id", "type": "integer", "foreignKey": true, "references": "companies" },
+                  { "name": "created_by", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "category_id", "type": "integer", "foreignKey": true, "references": "incident_report_categories" },
+                  { "name": "incident_category", "type": "varchar" }
+              ]
+          },
+          {
+              "name": "incident_report_categories",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+          { "name": "key", "type": "text"},
+                  { "name": "title_tr", "type": "text" },
+          { "name": "title_en", "type": "text" }
+              ]
+          },
+          {
+              "name": "operational_audit_report_v1",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "created_user", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "report_status", "type": "varchar" }
+              ]
+          },
+          {
+              "name": "roles",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "inherited_from", "type": "integer", "foreignKey": true, "references": "roles" }
+              ]
+          },
+          {
+              "name": "secg_report",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "created_user", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" }
+              ]
+          },
+          {
+              "name": "security_tour_control_list",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "created_user", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "editor", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "report_status", "type": "varchar" }
+              ]
+          },
+          {
+            "name": "share_report",
+            "columns": [
+              { "name": "id", "type": "integer", "primaryKey": true },
+              { "name": "created_by", "type": "integer", "foreignKey": true, "references": "users" },
+              { "name": "created_for", "type": "integer", "foreignKey": true, "references": "users" },
+              { "name": "report_id", "type": "varchar"},
+              { "name": "report_type", "type": "varchar"}
+            ],
+            "notes": "Bu tablo, raporların hangi kullanıcılarla paylaşıldığını tutar.  'report_id', paylaşılan raporun ID'sini, 'report_type' ise hangi türden bir rapor olduğunu (örn., 'secg_report', 'operational_audit_report_v1') belirtir.  Chatbot, bir raporun paylaşım bilgilerini alırken, 'report_type' değerine bakarak ilgili tabloyu (örn., secg_report, operational_audit_report_v1) belirlemeli ve 'report_id' değerini o tablodaki 'id' sütunu ile eşleştirmelidir."
+          },
+          {
+              "name": "units",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "parent_id", "type": "integer", "foreignKey": true, "references": "units" },
+                  { "name": "name", "type": "varchar" }
+              ]
+          },
+          {
+              "name": "users",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "unit_id", "type": "integer", "foreignKey": true, "references": "units" },
+                  { "name": "role_id", "type": "integer", "foreignKey": true, "references": "roles" },
+                  { "name": "city_id", "type": "integer", "foreignKey": true, "references": "cities" },
+                  { "name": "district_id", "type": "integer", "foreignKey": true, "references": "districts" },
+                  { "name": "job_id", "type": "integer", "foreignKey": true, "references": "jobs" }
+              ]
+          },
+          {
+              "name": "workplaces",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "company_id", "type": "integer", "foreignKey": true, "references": "companies" },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "nace_code_id", "type": "integer", "foreignKey": true, "references": "nace_codes" },
+                  { "name": "city_id", "type": "integer", "foreignKey": true, "references": "cities" },
+                  { "name": "district_id", "type": "integer", "foreignKey": true, "references": "districts" },
+                  { "name": "representative_id", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "name", "type": "varchar" }
+              ]
+          },
+          {
+              "name": "risk_analysis",
+              "columns": [
+                  { "name": "id", "type": "integer", "primaryKey": true },
+                  { "name": "account_id", "type": "integer", "foreignKey": true, "references": "accounts" },
+                  { "name": "workplace_id", "type": "integer", "foreignKey": true, "references": "workplaces" },
+                  { "name": "created_by", "type": "integer", "foreignKey": true, "references": "users" },
+                  { "name": "male_employees", "type": "integer" },
+                  { "name": "female_employees", "type": "integer" },
+                  { "name": "disabled_employees", "type": "integer" },
+                  { "name": "created_at", "type": "timestamp" },
+                  { "name": "updated_at", "type": "timestamp" }
+              ]
+          },
+              {
+              "name": "account_types",
+                  "columns":[
+                          { "name": "id", "type": "integer", "primaryKey": true }
+                  ]
+          },
+          {
+              "name": "tax_administrations",
+                  "columns": [
+                          { "name": "id", "type": "integer", "primaryKey": true }
+                  ]
+          },
+          {
+              "name": "control_list_responses",
+                  "columns": [
+                          { "name": "id", "type": "integer", "primaryKey": true }
+                  ]
+          },
+               {
+              "name": "suppliers",
+                  "columns": [
+                           { "name": "id", "type": "integer", "primaryKey": true }
+                  ]
+          },
+              {
+              "name": "cities",
+                      "columns": [
+                              { "name": "id", "type": "integer", "primaryKey": true }
+                      ]
+          },
+           {
+              "name": "districts",
+                   "columns": [
+                              { "name": "id", "type": "integer", "primaryKey": true }
+                   ]
+          },
+              {
+              "name": "jobs",
+                      "columns":[
+                              { "name": "id", "type": "integer", "primaryKey": true }
+                      ]
+          },
+           {
+              "name": "nace_codes",
+                      "columns":[
+                               { "name": "id", "type": "integer", "primaryKey": true }
+                      ]
+          }
+  
+      ],
+    "relationships": [
+      { "fromTable": "companies", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "accounts", "toTable": "account_types", "type": "many-to-one"},
+      { "fromTable": "bulgu_rapor", "toTable": "operational_audit_report_v1", "type": "many-to-one" },
+      { "fromTable": "bulgu_rapor", "toTable": "secg_report", "type": "many-to-one" },
+      { "fromTable": "companies", "toTable": "tax_administrations", "type": "many-to-one"},
+      { "fromTable": "dfis", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "dfis", "toTable": "control_list_responses", "type": "many-to-one" },
+      { "fromTable": "dfis", "toTable": "users", "type": "many-to-one", "fromColumns": ["created_by"] },
+      { "fromTable": "dfis", "toTable": "workplaces", "type": "many-to-one", "fromColumns": ["workplace_id"] },
+      { "fromTable": "dfis", "toTable": "users", "type": "many-to-one", "fromColumns": ["created_for"]  },
+      { "fromTable": "dfis", "toTable": "units", "type": "many-to-one" },
+      { "fromTable": "dfis", "toTable": "suppliers", "type": "many-to-one" },
+      { "fromTable": "dfis", "toTable": "workplaces", "type": "many-to-one", "fromColumns": ["created_workplace"]  },
+      { "fromTable": "incident_report", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "incident_report", "toTable": "companies", "type": "many-to-one" },
+      { "fromTable": "incident_report", "toTable": "users", "type": "many-to-one" },
+      {
+        "fromTable": "incident_report",
+        "toTable": "incident_report_categories",
+        "type": "many-to-one",
+        "fromColumns": ["category_id"],
+        "toColumns": ["id"],
+        "note": "incident_report.category_id, incident_report_categories tablosundaki id ile eşleşir.  Bir olayın (incident_report) kategori bilgisini (adını) almak için, incident_report_categories tablosuna gidilmeli ve ilgili id'ye sahip satırdaki title_tr (Türkçe başlık) veya title_en (İngilizce başlık) alanlarından biri kullanılmalıdır."
+      },
+      { "fromTable": "operational_audit_report_v1", "toTable": "users", "type": "many-to-one" },
+      { "fromTable": "operational_audit_report_v1", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "roles", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "roles", "toTable": "roles", "type": "many-to-one" },
+      { "fromTable": "secg_report", "toTable": "users", "type": "many-to-one" },
+      { "fromTable": "secg_report", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "security_tour_control_list", "toTable": "users", "type": "many-to-one", "fromColumns": ["created_user"]  },
+      { "fromTable": "security_tour_control_list", "toTable": "users", "type": "many-to-one", "fromColumns": ["editor"] },
+      { "fromTable": "security_tour_control_list", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "share_report", "toTable": "users", "type": "many-to-one", "fromColumns": ["created_by"]  },
+      { "fromTable": "share_report", "toTable": "users", "type": "many-to-one", "fromColumns": ["created_for"]  },
+      { "fromTable": "units", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "units", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "units", "toTable": "units", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "units", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "roles", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "cities", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "districts", "type": "many-to-one" },
+      { "fromTable": "users", "toTable": "jobs", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "companies", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "cities", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "districts", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "nace_codes", "type": "many-to-one" },
+      { "fromTable": "workplaces", "toTable": "users", "type": "many-to-one" },
+      { "fromTable": "risk_analysis", "toTable": "accounts", "type": "many-to-one" },
+      { "fromTable": "risk_analysis", "toTable": "workplaces", "type": "many-to-one" },
+      { "fromTable": "risk_analysis", "toTable": "users", "type": "many-to-one" }
+    ]
+  }
